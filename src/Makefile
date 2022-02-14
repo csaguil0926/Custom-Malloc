@@ -1,4 +1,4 @@
-TARGET = memgrid
+TARGET = memgrind
 CC = gcc
 CFLAGS = -g -std=c99 # -Wall -Wvla -Werror -Wextra -Wundef -Wshadow -Wpointer-arith -fsanitize=undefined # Will probably add more options as we go, but this is okay for now.
 
@@ -9,17 +9,17 @@ all: $(TARGET)
 run: $(TARGET)
 	./$<
 
-memgrid: mymalloc.o memgrid.o
+memgrind: mymalloc.o $(TARGET).o
 	$(CC) $(CFLAGS) -o $@ $^
 
-memgrid.o: memgrid.c
+$(TARGET).o: $(TARGET).c
 	$(CC) -c $(CFLAGS) $^
 
 mymalloc.o: mymalloc.c
 	$(CC) -c $(CFLAGS) $^
 
 mymalloc.c: mymalloc.h
-memgrid.c: mymalloc.h
+$(TARGET).c: mymalloc.h
 
 clean:
 	rm -rfv $(TARGET) *.o *.a *.dylib *.dSYM
