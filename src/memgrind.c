@@ -13,6 +13,8 @@ int main(int argc, char *argv[]) {
 
     printf("%p", p2);
 
+    // free(p1);
+
     printMemory(64);
 
 	 // I think this is going to be used as a driver file? I am not sure. 
