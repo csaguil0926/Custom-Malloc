@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <assert.h>
+#include <unistd.h>
 #include "mymalloc.h"
 
 /*
@@ -11,8 +12,6 @@
 
 #define TRUE 84
 #define FALSE 70
-
-#define MEMSIZE 4096
 
 static char memory[MEMSIZE]; // Assuming that everything in the char array is 0.
 
@@ -43,49 +42,56 @@ void printMemory(int bytes) {
     }
 }
 
+void *initializeMemory(size_t size) {
+    struct metaData *md = (struct metaData *) memory; // md's actual contents gets written to the same place where memory is stored. It starts writing at the address of memory[0]
+
+    md->available = FALSE;
+    md->dataSize = size;
+
+    md = (struct metaData *) &memory[sizeof(struct metaData) + md->dataSize]; // Have md point to basically after the metadata and allocated memory given to the user.
+
+    md->available = TRUE;
+    md->dataSize = MEMSIZE - (sizeof(struct metaData) * 2) - size; // How much memory there is left to allocate
+
+    return memory + sizeof(struct metaData); // Return pointer to first allocated memory.
+}
+
 void *mymalloc(size_t size, char *file, int line) {
     if (size > MEMSIZE) {
         perror("You are requesting too much memory!"); // Should be replaced with a function call in errors.c
         return NULL;
     }
 
-    struct metaData *md = (struct metaData *) memory; // md's actual contents gets written to the same place where memory is stored. It starts writing at the address of memory[0]
+
 
     if (memory[0] == 0) { // Initialize the memory.
-        md->available = FALSE;
-        md->dataSize = size;
-
-        md = (struct metaData *) memory + sizeof(struct metaData) + md->dataSize; // Have md point to basically after the metadata and allocated memory given to the user.
-
-
-        md->available = TRUE;
-        md->dataSize = MEMSIZE - (sizeof(struct metaData) * 2) - size; // How much memory there is left to allocate
-        return memory + sizeof(struct metaData); // Return pointer to first allocated memory.
-    } else { // This else-branch is simply here for clarity. It can be assumed that md will point to memory[0] if the first if block does not execute.
-        for (int x = 0; x < MEMSIZE; x++) {
-            md = (struct metaData *) &memory[x];
-
-            if (md->available == FALSE) {
-                x += sizeof(struct metaData) + md->dataSize;
-                continue;
-            } else if (md->available == TRUE) {
-                if (md->dataSize >= size) { // What if there is no space for new metaData after allocating space?
-                    md->available = FALSE;
-                    md->dataSize = size;
-                    return &memory[x] + sizeof(struct metaData);
-                } else {
-                    return NULL;
-                }
-            }
-        }
-
-        return NULL;
+        return initializeMemory(size);
     }
 
+    int x = 0;
 
-    printf("%d\n\n", md->dataSize);
+    while (x < MEMSIZE) {
+        struct metaData *md = (struct metaData *) &memory[x];
 
+        if (md->available == FALSE) {
+            x += sizeof(struct metaData) + md->dataSize;
+            continue;
+        } else if (md->available == TRUE) {
+            if (md->dataSize >= size) { // What if there is no space for new metaData after allocating space?
+                md->available = FALSE;
+                md->dataSize = size;
 
+                md = (struct metaData *) &memory[x + sizeof(struct metaData) + md->dataSize];
+
+                md->available = TRUE;
+                md->dataSize = MEMSIZE - (x + (2 * sizeof(struct metaData)) + size);
+
+                return &memory[x] + sizeof(struct metaData);
+            } else {
+                return NULL;
+            }
+        }
+    }
     return NULL;
 }
 void myfree(void *ptr, char *file, int line) {
