@@ -57,3 +57,7 @@ dkms.conf
 
 # Executables
 src/memgrid
+
+# ignore tests Makefiles
+tests/test1/Makefile
+tests/test2/Makefile
