@@ -12,11 +12,6 @@ void segFault(char* file, int line){ //freed memory but tried to access it again
     return;
 }
 
-void heapBufferOverflow(char* file, int line){ //malloc too much and don't free any of it
-    printf("You cannot malloc more than the available memory space. This error is happening in %s on line %d\n", file, line);
-    return;
-}
-
 void memoryLeak(char* file, int line){ //forget to free allocated memory
     printf("You are getting an error because you did not free all the allocated memory. This error is happening in %s on line %d\n", file, line);
     return;
@@ -28,11 +23,11 @@ void wrongPointer(char* file, int line){ //client not giving right pointer to fr
 }
 
 void tooMuchMem(int MEMSIZE, char* file, int line){ //client requesting more than MEMSIZE
-    printf("You are requesting too much memory. You can request at most %d bytes. This error is happening in %s on line %d\n", MEMSIZE, file, line);
+    printf("You are requesting too much memory. You can request at most %d bytes. This error is happening in %s on line %d\n", (MEMSIZE-8), file, line);
     return;
 }
 
-void noMoreMem(char* file, int line){ //client requested more memory but there is no longer enough free space to allocate mem
+void noMoreMem(char* file, int line){ //client requested more memory but there is no longer enough free space to allocate mem, same as heap buffer overflow
     printf("Malloc was unable to find a block big enough for your call. This error is happening in %s on line %d\n", file, line);
     return;
 }
