@@ -1,6 +1,6 @@
 TARGET = memgrind
 CC = gcc
-CFLAGS = -g -std=c99 # -Wall -Wvla -Werror -Wextra -Wundef -Wshadow -Wpointer-arith -fsanitize=undefined # Will probably add more options as we go, but this is okay for now.
+CFLAGS = -g -std=c99 -Wall -Wvla -Wextra -Wundef -Wshadow -Wpointer-arith  #-fsanitize=undefined # Will probably add more options as we go, but this is okay for now.
 
 # README: Since this is just a skeleton, I've commented out the other CFLAGS... As we test, we should probably make sure our code can run with all these flags enabled.
 
