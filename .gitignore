@@ -56,7 +56,7 @@ dkms.conf
 .DS_Store
 
 # Executables
-src/memgrid
+src/memgrind
 
 # ignore tests Makefiles
 tests/test1/Makefile
