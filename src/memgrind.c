@@ -5,8 +5,6 @@
 //#include "mymalloc.h"
 
 int main(int argc, char *argv[]) {
-<<<<<<< HEAD
-
     time_t t;
     srand((unsigned) time(&t));
     
@@ -115,23 +113,8 @@ int main(int argc, char *argv[]) {
 
     //test case 5
 
-=======
-    int *p1 = malloc(4);
-    int *p2 = malloc(4);
-    int *p3 = malloc(6);
 
-    *p1 = 25;
-    *p2 = 32;
-    *p3 = 49;
-
-    printf("%p", p2);
-
-    // free(p1);
-
-    printMemory(64);
-
-	 // I think this is going to be used as a driver file? I am not sure. 
->>>>>>> 1d74f10e37200a23337511219442e3301c823ffc
     return 0;
     
 }
+// 00001111 10001100

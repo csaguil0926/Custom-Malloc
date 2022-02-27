@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include <assert.h>
-#include <unistd.h>
+#include "errors.h"
 #include "mymalloc.h"
 
 /*
@@ -40,7 +38,7 @@ struct metaData {
 void printMemory(int bytes) {
     for (int x = 0; x < bytes; x++) {
         printf("Address %d: %p\n", x, memory + x);
-        printf("Value: %x\n", memory[x]);
+        printf("Value: %d\n", memory[x]);
     }
 }
 
@@ -58,9 +56,30 @@ void *initializeMemory(size_t size) {
     return memory + sizeof(struct metaData); // Return pointer to first allocated memory.
 }
 
+void coalesceBlocks() {
+    int x = 0;
+    while (x < MEMSIZE) {
+        struct metaData *firstMetaData = (struct metaData *) &memory[x];
+
+        int nextMDLocation = x + sizeof(struct metaData) + firstMetaData->dataSize;
+
+        if (nextMDLocation > MEMSIZE) {
+            return;
+        }
+
+        struct metaData *secondMetaData = (struct metaData *) &memory[nextMDLocation];
+
+        if (firstMetaData->available == TRUE && secondMetaData->available == TRUE) {
+            firstMetaData->dataSize += secondMetaData->dataSize + sizeof(struct metaData);
+        }
+
+        x += sizeof(struct metaData) + firstMetaData->dataSize;
+    }
+}
+
 void *mymalloc(size_t size, char *file, int line) {
-    if (size > MEMSIZE) {
-        perror("You are requesting too much memory!"); // Should be replaced with a function call in errors.c
+    if (size + (2 * sizeof(struct metaData)) > MEMSIZE) {
+        tooMuchMem(MEMSIZE, file, line);
         return NULL;
     }
 
@@ -73,23 +92,27 @@ void *mymalloc(size_t size, char *file, int line) {
     while (x < MEMSIZE) {
         struct metaData *md = (struct metaData *) &memory[x];
 
-        if (md->available == FALSE) {
-            x += sizeof(struct metaData) + md->dataSize;
-            continue;
-        } else if (md->available == TRUE) {
-            if (md->dataSize >= size) { // What if there is no space for new metaData after allocating space?
-                md->available = FALSE;
-                md->dataSize = size;
+        if (md->available == TRUE && md->dataSize >= size) {
 
+            md->available = FALSE;
+            md->dataSize = size;
+
+            if ((x + sizeof(struct metaData) + md->dataSize) + 8 <= MEMSIZE) { // If we have space to allocate the next metadata
                 md = (struct metaData *) &memory[x + sizeof(struct metaData) + md->dataSize];
 
-                md->available = TRUE;
-                md->dataSize = MEMSIZE - (x + (2 * sizeof(struct metaData)) + size);
-
-                return &memory[x] + sizeof(struct metaData);
+                if (memory[x + sizeof(struct metaData) + md->dataSize] == 0) { // If there is no next metaData
+                    md->available = TRUE;
+                    md->dataSize = MEMSIZE - (x + (2 * sizeof(struct metaData)) + size);
+                }
             } else {
+
                 return NULL;
             }
+
+            return &memory[x] + sizeof(struct metaData);
+        } else if (md->available == FALSE) {
+            x += sizeof(struct metaData) + md->dataSize;
+            continue;
         }
     }
     return NULL;
@@ -99,6 +122,7 @@ void myfree(void *ptr, char *file, int line) {
 
     struct metaData *md = ptr - 8;
     md->available = TRUE;
+    coalesceBlocks();
 
     // It's at this point, we need to figure out how to coalesce blocks... =/
 }
