@@ -2,7 +2,7 @@
 #include "errors.h"
 
 void doubleFree(char* file, int line){//trying to free something you already freed
-    printf("You cannot free something twice. This error is happening in %s on line [ %s:%d ]\n", file, line);
+    printf("You cannot free something twice. [ %s:%d ]\n", file, line);
     return;
 }
 

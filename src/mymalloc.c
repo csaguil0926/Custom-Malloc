@@ -51,7 +51,7 @@ void *initializeMemory(size_t size) {
     md = (struct metaData *) &memory[sizeof(struct metaData) + md->dataSize]; // Have md point to basically after the metadata and allocated memory given to the user.
 
     md->available = TRUE;
-    md->dataSize = MEMSIZE - (sizeof(struct metaData) * 2) - size; // How much memory there is left to allocate
+    md->dataSize = MEMSIZE - (sizeof(struct metaData) * 3) - size; // How much memory there is left to allocate
 
     return memory + sizeof(struct metaData); // Return pointer to first allocated memory.
 }
@@ -93,19 +93,21 @@ void *mymalloc(size_t size, char *file, int line) {
         struct metaData *md = (struct metaData *) &memory[x];
 
         if (md->available == TRUE && md->dataSize >= size) {
+
             md->available = FALSE;
             md->dataSize = size;
 
-            if ((x + sizeof(struct metaData) + md->dataSize) + 8 <= MEMSIZE) { // If we have space to allocate the next metadata
-                md = (struct metaData *) &memory[x + sizeof(struct metaData) + md->dataSize];
+            unsigned int nextMDIndex = x + sizeof(struct metaData) + md->dataSize;
+            md = (struct metaData *) &memory[nextMDIndex];
 
-                if (memory[x + sizeof(struct metaData) + md->dataSize] == 0) { // If there is no next metaData
+            if (md->available != TRUE && md->available != FALSE) { // Then, there is no metaData to the right...
+                if (nextMDIndex + 8 <= MEMSIZE) {
                     md->available = TRUE;
                     md->dataSize = MEMSIZE - (x + (2 * sizeof(struct metaData)) + size);
+                } else {
+                    noMoreMem(file, line);
+                    return NULL;
                 }
-            } else {
-                x += sizeof(struct metaData) + md->dataSize;
-                continue;
             }
 
             return &memory[x] + sizeof(struct metaData);
@@ -123,12 +125,19 @@ void *mymalloc(size_t size, char *file, int line) {
 void myfree(void *ptr, char *file, int line) {
     // As of right now, this code assumes that ptr will point to the right thing. There is no error checking!
 
+    if (ptr == NULL) {
+        perror("Blash");
+        exit(1);
+    }
+
     struct metaData *md = ptr - 8;
 
     if (md->available == TRUE) {
         doubleFree(file, line);
         return;
     } else if ((md->available != FALSE && md->available != TRUE) || md->dataSize <= 0) { // The user could malloc the exact contents of the metaData, basically emulating it and then try to free it, but even actual malloc and free has this vulnerability.
+        printf("%d ", md->available);
+        perror("SOmething went bad");
         wrongPointer(file, line);
         return;
     } else {
