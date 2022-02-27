@@ -115,6 +115,4 @@ int main(int argc, char *argv[]) {
 
 
     return 0;
-
 }
-// 00001111 10001100
