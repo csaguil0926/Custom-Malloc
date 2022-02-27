@@ -93,7 +93,6 @@ void *mymalloc(size_t size, char *file, int line) {
         struct metaData *md = (struct metaData *) &memory[x];
 
         if (md->available == TRUE && md->dataSize >= size) {
-
             md->available = FALSE;
             md->dataSize = size;
 
@@ -105,24 +104,38 @@ void *mymalloc(size_t size, char *file, int line) {
                     md->dataSize = MEMSIZE - (x + (2 * sizeof(struct metaData)) + size);
                 }
             } else {
-
-                return NULL;
+                x += sizeof(struct metaData) + md->dataSize;
+                continue;
             }
 
             return &memory[x] + sizeof(struct metaData);
-        } else if (md->available == FALSE) {
+        } else {
             x += sizeof(struct metaData) + md->dataSize;
             continue;
         }
     }
+
+    noMoreMem(file, line);
     return NULL;
 }
+
+
 void myfree(void *ptr, char *file, int line) {
     // As of right now, this code assumes that ptr will point to the right thing. There is no error checking!
 
     struct metaData *md = ptr - 8;
-    md->available = TRUE;
-    coalesceBlocks();
+
+    if (md->available == TRUE) {
+        doubleFree(file, line);
+        return;
+    } else if ((md->available != FALSE && md->available != TRUE) || md->dataSize <= 0) { // The user could malloc the exact contents of the metaData, basically emulating it and then try to free it, but even actual malloc and free has this vulnerability.
+        wrongPointer(file, line);
+        return;
+    } else {
+        md->available = TRUE; // Data Size?
+        coalesceBlocks();
+    }
+
 
     // It's at this point, we need to figure out how to coalesce blocks... =/
 }
