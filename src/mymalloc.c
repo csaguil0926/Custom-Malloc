@@ -87,6 +87,10 @@ void *mymalloc(size_t size, char *file, int line) {
         return initializeMemory(size);
     }
 
+    if (size <= 0) {
+        mallocZero
+    }
+
     int x = 0;
 
     while (x < MEMSIZE) {
@@ -136,8 +140,6 @@ void myfree(void *ptr, char *file, int line) {
         doubleFree(file, line);
         return;
     } else if ((md->available != FALSE && md->available != TRUE) || md->dataSize <= 0) { // The user could malloc the exact contents of the metaData, basically emulating it and then try to free it, but even actual malloc and free has this vulnerability.
-        printf("%d ", md->available);
-        perror("SOmething went bad");
         wrongPointer(file, line);
         return;
     } else {
