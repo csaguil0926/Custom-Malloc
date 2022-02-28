@@ -51,13 +51,13 @@ int main(int argc, char *argv[]) {
     gettimeofday(&start, NULL);
 
 
-/*
+*//*
     test case 3
     Randomly choose between
         •Allocating a 1-byte chunk and storing the pointer in an array
         •Deallocating one of the chunks in the array (if any)
     Repeat until you have called malloc() 120 times, then free all remaining allocated chunks.
-    */
+    *//*
 
 
     srand(time(0));
@@ -115,11 +115,7 @@ int main(int argc, char *argv[]) {
 
     time_taken = end.tv_sec + end.tv_usec / 1e6 - start.tv_sec - start.tv_usec / 1e6; // in seconds
     printf("time program took %f seconds to execute\n", time_taken);
-
-    printf("\n\n\n");
-    //printMemory(4096);
-
-    //test case 5
+    
 
     return 0;
 }

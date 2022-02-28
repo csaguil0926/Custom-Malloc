@@ -34,6 +34,7 @@ struct metaData {
 };
 
 void printMemory(int bytes) {
+    printf("%d ", MEMSIZE);
     for (int x = 0; x < bytes; x++) {
         printf("Address %d: %p\n", x, memory + x);
         printf("Value: %d\n", memory[x]);
