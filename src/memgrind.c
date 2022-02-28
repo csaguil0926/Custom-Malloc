@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
-#include <unistd.h>
-#include <math.h>
 #include "mymalloc.h"
 
 int main() {
@@ -57,7 +55,7 @@ int main() {
         for (int j = 0; j<120; j++){
             test2[j] = &test1[j];
 
-            printf("This is the %d iteration of this test.\nThe pointer array at index: %d has the address: %p\n", i + 1, j, test2[j]);
+            printf("This is the %d iteration of this test.\nThe pointer array at index: %d has the address: %p\n", i + 1, j, test2[j]); // We are printing this out because the compiler gives us an unused variable warning if we don't. Since -Werror is on, it's probably best to keep this line.
         }
 
         printf("\n\n");
@@ -86,7 +84,7 @@ int main() {
     //gettimeofday(&start, NULL);
 
     int malloc_called = 0;
-    void *pointerArr[120];
+    void *pointerArr[120]; // Pointer Array
 
     for (int x = 0; x < 50; x++) {
         while (malloc_called < 120) {
@@ -100,18 +98,18 @@ int main() {
                     exit(1);
                 }
 
-                pointerArr[malloc_called] = chunk;
+                pointerArr[malloc_called] = chunk; // Store the pointer that malloc returned, in the pointer array.
                 malloc_called++;
                 continue;
-            } else {
-                for (int y = 0; y < malloc_called && pointerArr[y] != NULL; y++) {
+            } else { // Otherwise, we randomly free one of the chunks as specified in one of the test cases.
+                for (int y = 0; y < malloc_called && pointerArr[y] != NULL; y++) { // If there is something to actually deallocate, hence the condition.
                     free(pointerArr[y]);
                     pointerArr[y] = NULL;
                 }
             }
         }
 
-        for (int z = 0; z < malloc_called; z++) {
+        for (int z = 0; z < malloc_called; z++) { // This loop frees everything else in the array.
             if (pointerArr[z] != NULL) {
                 free(pointerArr[z]);
             }
@@ -140,14 +138,14 @@ int main() {
     gettimeofday(&start, NULL);
 
     for (int i = 0; i < 50; i++) {
-        int *array = (int *) malloc (120 * sizeof(int)); //make dynamic array
+        int *array = (int *) malloc (120 * sizeof(int)); // Make Array of size 120.
 
         if (array == NULL) {
             perror("Malloc Returned NULL. Please see error message above. Program is exiting...");
             exit(1);
         }
 
-        for (int j = 0; j < 120; j++){ //fill array with items
+        for (int j = 0; j < 120; j++) { // fill array with items
             array[j] = j;
         }
 
@@ -174,24 +172,24 @@ int main() {
     gettimeofday(&start, NULL);
 
     for (int x = 0; x < 50; x++) {
-        int **array = (int **) malloc(10 * sizeof(int *));
+        int **array = (int **) malloc(10 * sizeof(int *)); // Allocate rows of the array.
 
         for (int y = 0; y < 10; y++) {
-            array[y] = (int *) malloc(12 * sizeof(int));
+            array[y] = (int *) malloc(12 * sizeof(int)); // Allocate columns of the array.
         }
 
         for (int r = 0; r < 10; r++) {
             for (int c = 0; c < 12; c++) {
-                array[r][c] = rand() % RAND_MAX;
+                array[r][c] = rand() % RAND_MAX; // Fill it up with random integers.
             }
         }
 
         for (int i = 0; i < 10; i++) {
-            free(array[i]);
+            free(array[i]); // Free everything.
         }
 
-        free(array);
-    }
+        free(array); // Free array.
+    } // Repeat this 50 times.
 
     gettimeofday(&end, NULL);
 

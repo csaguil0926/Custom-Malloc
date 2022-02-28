@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include "../../src/mymalloc.h"
 
 //test will get size of identity matrix from user and make identity matrix
 

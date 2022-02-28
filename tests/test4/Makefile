@@ -1,4 +1,4 @@
-TARGET = test2
+TARGET = test4
 CC     = gcc
 CFLAGS = -g -std=c99 -Wall -Wvla -Werror -Wundef --Wpointer-arith -fsanitize=address,undefined
 

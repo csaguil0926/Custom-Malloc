@@ -58,13 +58,6 @@ dkms.conf
 # Executables
 src/memgrind
 
-# ignore tests Makefiles
-tests/test1/Makefile
-tests/test2/Makefile
-tests/test3/Makefile
-tests/test4/Makefile
-tests/test5/Makefile
-
 # Ignore test source files
 src/hass_test.c
 src/hass_test

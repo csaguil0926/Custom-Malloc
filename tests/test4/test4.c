@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../../src/mymalloc.h"
 
 //same as test 1 but expect seg fault error because trying to access something you already freed
 
@@ -12,13 +13,18 @@ int main(){
 
     printf("Number of elements: %d\n", n);
     
-    int* array = (int*)malloc(n*sizeof(int)); 
+    int* array = (int*)malloc(n*sizeof(int) * 0);
+
+    if (array == NULL) {
+        perror("Malloc Returned NULL");
+        exit(1);
+    }
     
     for (int i = 0; i<n; i++){
         array[i]=i+1;
     }
 
-    free(array);
+    free(array + 1);
 
     printf("Array: {");
     for (int i = 0; i<n; i++){

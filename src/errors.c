@@ -25,3 +25,8 @@ void mallocZeroError(char *file, int line) {
     printf("You cannot malloc zero bytes! Please think about your life choices and try again! [ %s:%d ] \n", file, line);
     return;
 }
+
+void nullPointerPassed(char *file, int line) {
+    printf("You passed a NULL pointer to free. This is not allowed! [ %s:%d ] \n", file, line);
+    return;
+}
