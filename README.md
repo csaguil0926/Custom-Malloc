@@ -4,7 +4,7 @@ This project implements a simulation of the malloc and free functions included i
 
 ### Properties Library Must Have To Be Correct
 
-In order for the library to be correct, we concluded that the library must have the ability to initialize memory, malloc, free, and coalesce blocks. The library must also have the ability to call out errors which include: double free, segmentation fault, trying to free the wrong pointer, requesting more than the available memsize, and running out of memory.
+In order for the library to be correct, we concluded that the library must have the ability to malloc, free, and coalesce blocks. The library must also have the ability to call out errors which include: double free, segmentation fault, trying to free the wrong pointer, requesting more than the available memsize, running out of memory, and trying to malloc zero.
 
 ### How to check that Code Has These Properties
 
