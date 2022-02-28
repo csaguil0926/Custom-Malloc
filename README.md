@@ -57,7 +57,7 @@ Repeat until you have called  malloc()  120 times, then free all remaining alloc
 		. . <br />
 		. . <br />
 		0 0 ... 1 <br />
-		e.g. if user inputs 5 as the size of identity matrix output will look like
+		e.g. if user inputs 5 as the size of identity matrix output will look like <br />
 		Enter size of matrix: 5 <br />
 		1 0 0 0 0 <br />
 		0 1 0 0 0 <br />
