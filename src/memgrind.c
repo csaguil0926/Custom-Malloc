@@ -1,7 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <sys/time.h>
 #include "mymalloc.h"
+
+void unusedFunction(char **arr) { // This is done to supress unused variable error provided in the -Wextra flag that we are using.
+	arr = arr;
+	return;
+}
 
 int main() {
     srand(time(0));
@@ -54,20 +60,19 @@ int main() {
 
         for (int j = 0; j<120; j++){
             test2[j] = &test1[j];
-
-            printf("This is the %d iteration of this test.\nThe pointer array at index: %d has the address: %p\n", i + 1, j, test2[j]); // We are printing this out because the compiler gives us an unused variable warning if we don't. Since -Werror is on, it's probably best to keep this line.
         }
 
-        printf("\n\n");
+		unusedFunction(test2); // This function was made to supress the unused variable warning in the -Wextra flag we are compiling with. Please ignore this. 
+
         free(test1);
     }
-
+	
     gettimeofday(&end, NULL);
 
     averageTimeTaken = (((long double) end.tv_usec) - ((long double) start.tv_usec)) / 50.0;
 
     printf("Test 2: This test is where we malloc 120, 1 byte chunks, and store the corresponding pointer returned in a separate array that we statically define. We repeated this 50 times as expressed in the instructions.\n");
-    printf("On average, it took about %Lf microseconds to complete this test (this includes the print statements that were used to avoid unused variables): \n\n\n", averageTimeTaken);
+    printf("On average, it took about %Lf microseconds to complete this test (this includes the calls to unusedFunction() that was made to supress unused variable warnings in this test): \n\n\n", averageTimeTaken);
 
     // ============================================================================================================
     // ============================================================================================================
@@ -196,7 +201,7 @@ int main() {
     averageTimeTaken = (((long double) end.tv_usec) - ((long double) start.tv_usec)) / 50.0;
     printf("Test 5: This test is where we created a 2D array and filled it with random integers between 0 and RAND_MAX.\n");
     printf("This test is repeated 50 times as expressed in the instructions.\n");
-    printf("On average, it took %Lf microseconds for each of these tasks to complete.", averageTimeTaken);
+    printf("On average, it took %Lf microseconds for each of these tasks to complete.\n\n", averageTimeTaken);
 
     // ============================================================================================================
     // ============================================================================================================

@@ -13,7 +13,7 @@ int main(){
 
     printf("Number of elements: %d\n", n);
     
-    int* array = (int*)malloc(n*sizeof(int) * 0);
+    int* array = (int*)malloc(n*sizeof(int));
 
     if (array == NULL) {
         perror("Malloc Returned NULL");

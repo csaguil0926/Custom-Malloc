@@ -1,6 +1,6 @@
 TARGET = test3
 CC     = gcc
-CFLAGS = -g -std=c99 -Wall -Wvla -Werror -Wundef --Wpointer-arith -fsanitize=address,undefined
+CFLAGS = -g -std=c99 -Wall -Wvla -Werror -Wundef -Wpointer-arith -fsanitize=address,undefined
 
 $(TARGET): $(TARGET).o mymalloc.o errors.o
 	$(CC) $(CFLAGS) $^ -o $@

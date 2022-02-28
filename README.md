@@ -132,7 +132,7 @@ WHEN `memgrind.c` IS EXECUTED USING THE MAKEFILE PROVIDED IN `src`.**
         >Number of elements: 4<br />
         >Array: {1, 2, 3, 4}<br />
 	
-2. test2 will get size of identity matrix from user, make identity matrix, and print it out
+2. Test2 will get size of identity matrix from user, make identity matrix, and print it out
     - Expected arguments:
         > Integer from the command line that determines how large the identity matrix will be
     - Expected output:
