@@ -6,11 +6,6 @@ void doubleFree(char* file, int line){//trying to free something you already fre
     return;
 }
 
-void segFault(char* file, int line){ //freed memory but tried to access it again, trying to access something you can't access, trying to free something not initialized
-    printf("You cannot access something that is not there or can't be accessed. [ %s:%d ]\n", file, line);
-    return;
-}
-
 void wrongPointer(char* file, int line){ //client not giving right pointer to free memory (they are giving pointer that is not pointing at metadata for memory we want to free)
     printf("You are not giving the right pointer to free memory. [ %s:%d ]\n", file, line);
     return;

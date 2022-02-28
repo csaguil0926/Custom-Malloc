@@ -27,15 +27,14 @@ static char memory[MEMSIZE]; // Assuming that everything in the char array is 0.
  * viewed only as a boolean value represented by the 'T' and 'F' ASCII characters. This is only done to prevent confusion with the
  * default char value in the memory array.
  */
-/*
- * Type def??
- */
+
 struct metaData {
     char available; // In this case, available will either be set as T or F for true or false.
     unsigned int dataSize; // We did not use size_t here to save space in the long run. Rather than having a 16 byte alignment, doing unsigned int makes it 8 byte aligned which will save space. I think it is safe to assume that the user will not be allocating more than 4.2 GB of memory all at once.
 };
 
 void printMemory(int bytes) {
+    printf("%d ", MEMSIZE);
     for (int x = 0; x < bytes; x++) {
         printf("Address %d: %p\n", x, memory + x);
         printf("Value: %d\n", memory[x]);
@@ -63,14 +62,14 @@ void coalesceBlocks() {
 
         int nextMDLocation = x + sizeof(struct metaData) + firstMetaData->dataSize;
 
-        if (nextMDLocation > MEMSIZE) {
+        if (nextMDLocation + 8 > MEMSIZE) {
             return;
         }
 
         struct metaData *secondMetaData = (struct metaData *) &memory[nextMDLocation];
 
         if (firstMetaData->available == TRUE && secondMetaData->available == TRUE) {
-            firstMetaData->dataSize += secondMetaData->dataSize + sizeof(struct metaData);
+            firstMetaData->dataSize += (secondMetaData->dataSize + sizeof(struct metaData));
         }
 
         x += sizeof(struct metaData) + firstMetaData->dataSize;
@@ -88,7 +87,8 @@ void *mymalloc(size_t size, char *file, int line) {
     }
 
     if (size <= 0) {
-        mallocZero
+        mallocZeroError(file, line);
+        return NULL;
     }
 
     int x = 0;
@@ -107,7 +107,7 @@ void *mymalloc(size_t size, char *file, int line) {
             if (md->available != TRUE && md->available != FALSE) { // Then, there is no metaData to the right...
                 if (nextMDIndex + 8 <= MEMSIZE) {
                     md->available = TRUE;
-                    md->dataSize = MEMSIZE - (x + (2 * sizeof(struct metaData)) + size);
+                    md->dataSize = MEMSIZE - (x + (3 * sizeof(struct metaData)) + size);
                 } else {
                     noMoreMem(file, line);
                     return NULL;
@@ -130,11 +130,11 @@ void myfree(void *ptr, char *file, int line) {
     // As of right now, this code assumes that ptr will point to the right thing. There is no error checking!
 
     if (ptr == NULL) {
-        perror("Blash");
+        printf("%s:%d", file, line);
         exit(1);
     }
 
-    struct metaData *md = ptr - 8;
+    struct metaData *md = ((struct metaData *) ptr) - 1;
 
     if (md->available == TRUE) {
         doubleFree(file, line);
@@ -146,7 +146,18 @@ void myfree(void *ptr, char *file, int line) {
         md->available = TRUE; // Data Size?
         coalesceBlocks();
     }
+}
 
+void freeAll() {
+    struct metaData *md;
+    for (int x = 0; x < MEMSIZE; x += sizeof(struct metaData *) + md->dataSize) {
+        md = (struct metaData *) &memory[x];
+        if (md->available == FALSE) {
+            free(&memory[x + sizeof(struct metaData)]);
+        }
+    }
 
-    // It's at this point, we need to figure out how to coalesce blocks... =/
+    coalesceBlocks();
+
+    return;
 }

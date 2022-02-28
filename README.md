@@ -51,6 +51,7 @@ Repeat until you have called  malloc()  120 times, then free all remaining alloc
 	- Expected arguments:
 		> Integer from the command line that determines how large the identity matrix will be
 	- Expected output:
+		> Enter size of matrix: # <br />
 		> Enter size of matrix: #<br />
 		1 0 ... 0 <br />
 		. . <br />
