@@ -39,7 +39,7 @@ Repeat until you have called  malloc()  120 times, then free all remaining alloc
 	- Expected arguments: 
 		>Integer from the command line that determines how large the array will be
 	- Expected output:
-		>Enter number of items:#
+		>Enter number of items:#<br />
 		>Number of elements: #<br />
 		>Array: {1,...,#}<br />
 		>e.g. if number of items entered is 4 the output would be<br />
@@ -51,7 +51,7 @@ Repeat until you have called  malloc()  120 times, then free all remaining alloc
 	- Expected arguments:
 		> Integer from the command line that determines how large the identity matrix will be
 	- Expected output:
-		> Enter size of matrix: #
+		> Enter size of matrix: #<br />
 		1 0 ... 0 <br />
 		. . <br />
 		. . <br />
