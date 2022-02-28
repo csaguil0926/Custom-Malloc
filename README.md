@@ -39,25 +39,26 @@ Repeat until you have called  malloc()  120 times, then free all remaining alloc
 	- Expected arguments: 
 		>Integer from the command line that determines how large the array will be
 	- Expected output:
-		>Enter number of items:#
-		>Number of elements: #
-		>Array: {1,...,#}
-		>e.g. if number of items entered is 4 the output would be
-		>Enter number of items:4
-		>Number of elements: 4
-		>Array: {1, 2, 3, 4}
+		>Enter number of items:#<br />
+		>Number of elements: #<br />
+		>Array: {1,...,#}<br />
+		>e.g. if number of items entered is 4 the output would be<br />
+		>Enter number of items:4<br />
+		>Number of elements: 4<br />
+		>Array: {1, 2, 3, 4}<br />
 	
 2. test2 will get size of identity matrix from user, make identity matrix, and print it out
 	- Expected arguments:
 		> Integer from the command line that determines how large the identity matrix will be
 	- Expected output:
 		> Enter size of matrix: # <br />
+		> Enter size of matrix: #<br />
 		1 0 ... 0 <br />
 		. . <br />
 		. . <br />
 		. . <br />
 		0 0 ... 1 <br />
-		e.g. if user inputs 5 as the size of identity matrix output will look like
+		e.g. if user inputs 5 as the size of identity matrix output will look like <br />
 		Enter size of matrix: 5 <br />
 		1 0 0 0 0 <br />
 		0 1 0 0 0 <br />
