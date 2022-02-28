@@ -1,6 +1,6 @@
 TARGET = memgrind
 CC = gcc-9
-CFLAGS = -g -std=c99 -Wall -Wvla -Wextra -Wundef -Wshadow -Wpointer-arith -O2 -D_FORTIFY_SOURCE=2 # -fsanitize=address # Will probably add more options as we go, but this is okay for now.
+CFLAGS = -g -std=c99 -Wall -Wvla -Wextra -Wundef -Wshadow -Wpointer-arith -O2 -D_FORTIFY_SOURCE=2 -fsanitize=address
 OBJ = mymalloc.o $(TARGET).o errors.o
 
 
