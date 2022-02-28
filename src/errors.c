@@ -25,3 +25,8 @@ void noMoreMem(char* file, int line){ //client requested more memory but there i
     printf("Malloc was unable to find a block big enough for your call. [ %s:%d ]\n", file, line);
     return;
 }
+
+void mallocZeroError(char *file, int line) {
+    printf("You cannot malloc zero bytes! Please think about your life choices and try again! [ %s:%d ] \n", file, line);
+    return;
+}
