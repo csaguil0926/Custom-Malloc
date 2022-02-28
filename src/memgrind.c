@@ -99,13 +99,13 @@ int main(int argc, char *argv[]) {
 
     //test case 4
 
-    for (int i = 0; i<50; i++){
-        int n = rand() % 120;
+    for (int i = 0; i < 50; i++){
+        int n = (rand() % 120) + 1;
 
-        int* array = (int*) malloc (n*sizeof(int)); //make dynamic array
+        int *array = (int *) malloc (n * sizeof(int)); //make dynamic array
 
-        for (int j = 0; j<n; j++){ //fill array with items
-            array[j]=j+1;
+        for (int j = 0; j < n; j++){ //fill array with items
+            array[j] = n;
         }
 
         free(array);

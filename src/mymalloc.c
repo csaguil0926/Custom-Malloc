@@ -27,9 +27,7 @@ static char memory[MEMSIZE]; // Assuming that everything in the char array is 0.
  * viewed only as a boolean value represented by the 'T' and 'F' ASCII characters. This is only done to prevent confusion with the
  * default char value in the memory array.
  */
-/*
- * Type def??
- */
+
 struct metaData {
     char available; // In this case, available will either be set as T or F for true or false.
     unsigned int dataSize; // We did not use size_t here to save space in the long run. Rather than having a 16 byte alignment, doing unsigned int makes it 8 byte aligned which will save space. I think it is safe to assume that the user will not be allocating more than 4.2 GB of memory all at once.
@@ -88,7 +86,8 @@ void *mymalloc(size_t size, char *file, int line) {
     }
 
     if (size <= 0) {
-        mallocZero
+        mallocZeroError(file, line);
+        return NULL;
     }
 
     int x = 0;
