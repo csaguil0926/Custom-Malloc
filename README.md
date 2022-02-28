@@ -52,18 +52,18 @@ Repeat until you have called  malloc()  120 times, then free all remaining alloc
 		> Integer from the command line that determines how large the identity matrix will be
 	- Expected output:
 		> Enter size of matrix: #
-		1 0 ... 0
-		. .
-		. .
-		. .
-		0 0 ... 1
+		1 0 ... 0 <br />
+		. . <br />
+		. . <br />
+		. . <br />
+		0 0 ... 1 <br />
 		e.g. if user inputs 5 as the size of identity matrix output will look like
-		Enter size of matrix: 5
-		1 0 0 0 0
-		0 1 0 0 0
-		0 0 1 0 0
-		0 0 0 1 0
-		0 0 0 0 1
+		Enter size of matrix: 5 <br />
+		1 0 0 0 0 <br />
+		0 1 0 0 0 <br />
+		0 0 1 0 0 <br />
+		0 0 0 1 0 <br />
+		0 0 0 0 1 <br />
 	
 3. Similar to test case 1, however, instead of freeing correctly we are freeing twice. We are expecting this to give the doubleFree error in our library.
 	- Expected arguments: 
